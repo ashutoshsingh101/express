@@ -1,7 +1,27 @@
 #client
+
+
 from dcm import data_chunking_level_1
 from interpreter import image_interpreter
+from oir import optical_image_recognition
 import time
+import PythonMagick as pm 
+import os
+
+
+
+
+input_pdf_name = raw_input("enter file name: ")
+os.system("pdftk "+input_pdf_name+" Burst output pages/pdf_name%02d.pdf")
+
+
+img = pm.Image()
+img.density("500")
+
+for page in os.listdir("pages"):
+    if page.endswith(".pdf"):
+	img.read("pages/"+page)
+    	img.write("image/"+str(page.split('.')[0])+".jpg")
 
 
 height=1200
@@ -14,27 +34,32 @@ blue=0
 red=0
 green =0
 
-primary_row=[12,254,165]
+primary_row=[9,254,165]
 secondary_col=[7,255,-1]
 secondary_row=[5,254,165]
 
-image='images/test1-'
+chunking = data_chunking_level_1(height,width,skip_color_start,skip_color_end)
+interpret = image_interpreter(red,green,blue)
+oir=optical_image_recognition()
+out_final=[]
 
-start_t = time.time()
-for i in range(1,15):
-        if i < 10:
-                image=image+"0"+str(i)+'.png'
-        else:
-                image=image+str(i)+'.png'
-        print(image)
-        chunking = data_chunking_level_1(height,width,skip_color_start,skip_color_end)
-        data_dict,gray = chunking.draw_table_on_image_file(image,primary_row,secondary_col,secondary_row)
-#        interpret = image_interpreter(red,green,blue)
-#        interpret.draw_table(image,data_dict)
-#        print(data_dict)
-        image='images/test1-'
-end_t = time.time()
+for item in os.listdir("image"):
+    if item.endswith(".jpg") or item.endswith(".png"):
+	image = "image/"+item
+	
+
+	start_t = time.time()
+	data_dict,gray = chunking.draw_table_on_image_file(image,primary_row,secondary_col,secondary_row)
+
+	interpret.draw_table(image,data_dict)
+        #print(data_dict)
+
+	out=oir.crop_image(gray,data_dict)
+	out_final.append(out)
+        interpret.print_output_data(out)
+	end_t = time.time()
 print("total: "+str(end_t-start_t))
-# oir=optical_image_recognition()
-# out=oir.crop_image(gray,data_dict)
-# interpret.print_output_data(out)
+print(out_final)
+
+
+

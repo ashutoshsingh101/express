@@ -155,6 +155,7 @@ class data_chunking_level_2():
         row_vector=self.d3.calculate_vector(gray,False,0,0)
         horizontal_chunks_index=self.d3.primary_segmentation(gray,row_vector,primary)
         horizontal_chunks_index = self.d3.accumulate_whitespaces(horizontal_chunks_index)
+        horizontal_chunks_index.append(self.height)
         end_t = time.time() 
 #         print("draw_segmented_rows: "+str(end_t-start_t))
         return horizontal_chunks_index,row_vector,resized_image

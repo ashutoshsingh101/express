@@ -22,7 +22,7 @@ class image_interpreter():
     def display_image(self,image_name,window_name):
         start_t = time.time()
         cv2.imshow("view",image_name)
-        cv2.waitKey(0)
+        cv2.waitKey(1)
         cv2.destroyAllWindows()
         end_t = time.time()
 #         print("display_image: "+str(end_t-start_t))
