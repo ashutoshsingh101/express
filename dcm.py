@@ -35,7 +35,7 @@ class data_chunking_level_3():
         self.primary_horizontal_skip_pixel=primary[0]
         self.primary_horizontal_threshold=primary[1]
         self.primary_horizontal_line_threshold=primary[2]
-        horizontal_chunks_index = []
+        horizontal_chunks_index = [0]
         
         line_detect_temp =  np.array(gray.tolist())
         line_detect_temp[line_detect_temp<=self.primary_horizontal_line_threshold] = 1
@@ -186,7 +186,7 @@ class data_chunking_level_2():
         cv2.imshow(window_name,image_name)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
-        end_t = time.time() 
+        end_t = time.time()
 #         print("display_image: "+str(end_t-start_t))
 
 
@@ -223,6 +223,6 @@ class data_chunking_level_1():
         data_dict["chunk"] = data
         end_t = time.time()
         print("draw_table_on_image_file: "+str(end_t-start_t))
-        return data_dict,gray
+        return data_dict,gray,horizontal_chunks_index
         
 
